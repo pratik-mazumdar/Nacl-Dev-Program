@@ -10,9 +10,10 @@ Web app for developers to submit there games in Nacl-Appstore.
 #### Database Tables
 Database name should be nacl with table names as follows:
 1.developer 
-2.files
+2.country
 3.games
 4.users
+5.account
 
 ### Screenshot
 
