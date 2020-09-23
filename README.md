@@ -8,7 +8,7 @@ Web app for developers to submit there games in Nacl-Appstore.
 3. SQNile (Own library for database queries)
 
 #### Database Tables
-Database name should be nacl with table names as follows:
+Database name should be nacl with table names as follows:<br>
 1.developer <br>
 2.country <br>
 3.games<br>
