@@ -133,14 +133,15 @@ use MainModel;
                 "email"=>$this->session->temp["email"],
                 "comp_name"=>$this->session->temp["comp_name"],
                 "dev_id"=> $id["dev_id"]
-            );                
+            ); 
+            $this->sqnile->query('INSERT INTO account (dev_id,country) VALUES (?,ind)',[$this->session->dev['dev_id']]);               
             $this->session->unset_userdata("temp");
             mkdir("./uploads/".$this->session->dev["dev_id"]."/");
             redirect("index");
         }catch(Exception $e){
             // incase of an error occured in fetch function, delete user from developer table
             if ($e->getCode() == 1002)
-                $this->sqnile->query("DELETE FROM developer WHERE `dev_id` = ?",[$this->session->temp["email"]]);
+                $this->sqnile->query("DELETE FROM developer WHERE `email` = ?",[$this->session->temp["email"]]);
             $this->session->unset_userdata("temp");
             $this->session->msg = $e->getMessage();
             $this->session->mark_as_flash("msg");

@@ -53,7 +53,6 @@ use MainModel;
             $config['file_name']  = $filename.'.png';
             $config['overwrite'] = true;
             $this->load->library('upload', $config);
-            print_r($filename);
             if ($this->upload->do_upload('filepond'))
                 $this->session->thumbnail = $filename;
             else
@@ -64,13 +63,15 @@ use MainModel;
     function upload_apk(){
         if ($this->input->get_request_header('X-CSRF-Token', TRUE) == $this->security->get_csrf_hash() && $this->is_online()){
             $this->load->library("SQNile");
-            $this->session->apk = $this->sqnile->fetch("SELECT apk from games WHERE `dev_id` = ?",[$this->session->dev["dev_id"]]);
-            $this->session->apk != null ? $this->session->apk += 2 : $this->session->apk = 1 ;
+            $filename = $this->sqnile->fetch("SELECT apk from games WHERE `dev_id` = ?",[$this->session->dev["dev_id"]]);
+            $filename != null ?  $filename = $filename['apk'] += 2 :  $filename = 1 ;
             $config['upload_path']  = './uploads/'.$this->session->dev["dev_id"]."/";
             $config['allowed_types']  = 'apk';
-            $config['file_name']  = $this->session->apk.'.apk';
+            $config['file_name']  =  $filename.'.apk';
             $this->load->library('upload', $config);
-            if (!$this->upload->do_upload('filepond'))
+            if ($this->upload->do_upload('filepond'))
+                $this->session->apk = $filename;
+            else
                 throw new Exception(Strings::UNKNOWN_ERROR);
         }else
             throw new Exception(Strings::UNKNOWN_ERROR);
@@ -103,12 +104,30 @@ use MainModel;
             echo validation_errors();
     }
     function dashboard(){
-        /*if (!$this->is_online()){
+        if (!$this->is_online()){
             $this->session->msg = Strings::LOGIN_REQUIRED;
             $this->session->mark_as_flash('msg');
             redirect('signup');    
-        }*/
-        $this->load->view('user_setting');
+        }
+        $this->load->library('SQNile');
+        $payouts = $this->sqnile->fetch_all("SELECT income FROM games WHERE dev_id = ?",[$this->session->dev['dev_id']]);
+        $account = $this->sqnile->fetch("SELECT account.*,country.country_name FROM account LEFT JOIN country ON account.country = country.code where account.dev_id = ?",
+                        [$this->session->dev['dev_id']]);
+        $income = 0;
+        foreach($payouts as $payout)
+            $income += $payout['income'];
+        $content = array_merge($this->session->dev,array('income'=> $income));
+        $content = array_merge($content,$account);
+        if ($content['details'] != null){
+            $account = json_decode($content['details'],true);
+            $content['first_key'] = $account[array_key_first($account)];
+            $content['second_key'] = $account[array_key_last($account)];
+        }else{
+            $content['first_key'] = null;
+            $content['second_key'] = null;
+        }
+        
+        $this->load->view('user_setting',$content);
     }
     function payout(){
         if (!$this->is_online()){

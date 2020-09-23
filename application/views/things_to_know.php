@@ -88,8 +88,14 @@
                      <p class="excert">
                         <ul>
                            <li>India</li>
-                           <li>United States of America</li>
+                           <li>Australia</li>
+                           <li>Belgium</li>
+                           <li>Canada</li>
+                           <li>Finland</li>
+                           <li>Germany</li>
+                           <li>Japan</li>
                            <li>United Kingdom</li>
+
                         </ul>
                      </p>
                   </div>

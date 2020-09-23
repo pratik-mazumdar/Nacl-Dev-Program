@@ -1,23 +1,10 @@
-<!--
-=========================================================
-* * Black Dashboard - v1.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
+  <meta name="first_key" content="<?=$first_key?>">
+  <meta name="first_key" content="<?=$second_key?>">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="<?= base_url(); ?>assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png">
@@ -126,49 +113,62 @@
                   <div class="row">
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
-                        <label>Company Name (Required)</label>
-                        <input type="text" class="form-control" name="company_name" placeholder="Company/Indie Developer Name" value="">
+                        <label>Company Name</label>
+                        <input type="text" class="form-control" name="company_name" placeholder="Company/Indie Developer Name" value="<?= $comp_name ?>">
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">
                       <div class="form-group">
-                        <label for="exampleInputEmail1">Email address (Required)</label>
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email address">
+                        <label for="exampleInputEmail1">Email address </label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email address" value="<?= $email ?>">
                       </div>
                     </div>
                   </div>
+                  
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Old Password</label>
+                        <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Old Password" required>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
-                        <label>New Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="New Password">
+                        <label>New Password (Optional)</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" placeholder="New Password">
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">
                       <div class="form-group">
-                        <label>Confirm Password</label>
+                        <label>Confirm Password (Optional)</label>
                         <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password">
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <div class="form-group">
                         <label for="cars">Select Country</label>
-                        <select class="form-control" name="countries">
-                          <option value="volvo">India</option>
-                          <option value="saab">United States of America</option>
-                          <option value="mercedes">United Kingdom</option>
+                        <select class="form-control" name="countries" >
+                        <option value="<?=$country?>"><?=$country_name?></option>  
+                          <option value="aus">Australia</option>  
+                          <option value="bel">Belgium</option>  
+                          <option value="can">Canada</option>
+                          <option value="fin">Finland</option> 
+                          <option value="fra">France</option> 
+                          <option value="ger">Germany</option> 
+                          <option value="ind">India</option>       
+                          <option value="jap">Japan</option>
+                          <option value="uk">United Kingdom</option>
                         </select>
                       </div>
                     </div>
-                    <div class="col-md-6 pl-md-1">
-                      <div class="form-group">
-                        <label>Account Number</label>
-                        <input type="text" class="form-control" name="ac_name" placeholder="Account Number">
-                      </div>
-
-                    </div>
+                  </div>
+                  <div class="row" id="row">
+                    
                   </div>
                   <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
                 </div>
@@ -192,9 +192,9 @@
                     <i class="tim-icons icon-money-coins size-8"></i>
                   </div>
                   <div class="col-md-6">
-                    <span class="money">Credit : $200</span><br>
-                    <span class="money">Fee : $200</span><br><br>
-                    <span class="money">Total : $190</span><br>
+                    <span class="money">Credit : <span id="credit"><?= $income ?></span></span><br><br>
+                    <span class="money">Fee :<span id="fee"></span></span><br><br>
+                    <span class="money">Total : <span id="total"></span></span><br>
                   </div>
                 </div>
               </div>
