@@ -2,6 +2,9 @@
 Web app for developers to submit there games in Nacl-Appstore.
 ### Development
 
+#### Codeigniter changes
+Documented [here](https://github.com/LUCIF680/Nacl-Dev-Program/edit/master/codeigniter_changes.md)
+
 #### Framework/libraries used are 
 1. Codeigniter
 2. PHPMailer
@@ -9,11 +12,11 @@ Web app for developers to submit there games in Nacl-Appstore.
 
 #### Database Tables
 Database name should be nacl with table names as follows:<br>
-1.developer <br>
-2.country <br>
-3.games<br>
-4.users<br>
-5.account<br>
+* developer 
+* country 
+* games
+* users
+* account
 
 ### Screenshot
 
