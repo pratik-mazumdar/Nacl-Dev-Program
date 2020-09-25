@@ -8,10 +8,9 @@ $(document).ready(function () {
         let credit = $('#credit').text();
         $('#fee').text(10 * (credit / 100));
         $('#total').text(credit - (10 * (credit / 100)));
-        
+
         createInputs($('select').val());
         $('select').on('change', function () {
-            $('#checkbox').prop('checked', false); 
             let value = $('select').val();
             col.remove();
             if (col_two != undefined)
@@ -22,20 +21,22 @@ $(document).ready(function () {
 
         //Checkbox setting
         $('#checkbox').on('change', function () {
-           if ($('#checkbox').prop('checked')){
-            $("[name='ac_number']").removeAttr('disabled');
-            $("[name='ifsc']").removeAttr('disabled');
-            $("[name='bic']").removeAttr('disabled');
-            $("[name='short_code']").removeAttr('disabled');
-            $("[name='iban']").removeAttr('disabled');
-           }else{
-            $("[name='ac_number']").attr('disabled','disabled');
-            $("[name='ifsc']").attr('disabled','disabled');
-            $("[name='bic']").attr('disabled','disabled');
-            $("[name='short_code']").attr('disabled','disabled');
-            $("[name='iban']").attr('disabled','disabled');
-           }
-        });   
+            if ($('#checkbox').prop('checked')) {
+                $("[name='ac_number']").removeAttr('disabled');
+                $("[name='ifsc']").removeAttr('disabled');
+                $("[name='bic']").removeAttr('disabled');
+                $("[name='short_code']").removeAttr('disabled');
+                $("[name='iban']").removeAttr('disabled');
+                $("[name='countries']").removeAttr('disabled');
+            } else {
+                $("[name='ac_number']").attr('disabled', 'disabled');
+                $("[name='ifsc']").attr('disabled', 'disabled');
+                $("[name='bic']").attr('disabled', 'disabled');
+                $("[name='short_code']").attr('disabled', 'disabled');
+                $("[name='iban']").attr('disabled', 'disabled');
+                $("[name='countries']").attr('disabled', 'disabled');
+            }
+        });
 
 
         $('#payout').click(function () {
@@ -47,7 +48,7 @@ $(document).ready(function () {
         });
         // validate contactForm form
         $(function () {
-            /*$('#contactForm').validate({
+            $('#contactForm').validate({
                 rules: {
                     new_password: {
                         minlength: 8
@@ -87,7 +88,7 @@ $(document).ready(function () {
                     },
 
                 }
-            })*/
+            })
         })
 
     })(jQuery)

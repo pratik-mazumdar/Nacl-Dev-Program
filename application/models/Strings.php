@@ -14,5 +14,6 @@ interface Strings{
     const LOGIN_REQUIRED = 'Must login before visiting that page.';
     const DASHBOARD = 'DASHBOARD';
     const INVALID_PASSWORD = 'Invalid Password';
+    const MATCH_PASSWORD = 'New Password and Confirm password must match ';
     const PAYOUT_DONE = 'Amount will be reflected in a week in your account.';
 }

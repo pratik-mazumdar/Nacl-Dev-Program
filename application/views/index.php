@@ -223,7 +223,7 @@
                             <li>24 * 7 Support</li>
                         </ul>
                         <div class="prising_bottom">
-                            <a href="#" class="get_now prising_btn">Get Now</a>
+                            <a href="signup" class="get_now prising_btn">Get Now</a>
                         </div>
                     </div>
                 </div>

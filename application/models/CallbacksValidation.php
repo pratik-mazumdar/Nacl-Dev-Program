@@ -17,5 +17,14 @@ trait CallbacksValidation{
         }
         return true;
     }
+    public function match_confirm($old_password){
+        if ($old_password != null) {
+            if ($old_password == $this->input->post('confirm_password', true)) {
+                $this->form_validation->set_message('match_confirm', Strings::MATCH_PASSWORD);
+                return false;
+            }
+            return true;
+        }
+    }
     
 }

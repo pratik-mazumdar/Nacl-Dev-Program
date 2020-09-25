@@ -110,20 +110,9 @@ use CallbacksValidation;
         $this->load->helper("form");
         $this->load->library('SQNile');
         $payout = $this->sqnile->fetch("SELECT income,payout FROM developer WHERE dev_id = ?",[$this->session->dev['dev_id']]);
-        $account = $this->sqnile->fetch("SELECT account.*,country.country_name FROM account LEFT JOIN country ON account.country = country.code where account.dev_id = ?",
-                        [$this->session->dev['dev_id']]);
         $income = 0;
         $payout['income'] -= $payout['payout'];
         $content = array_merge($this->session->dev,array('income'=> $income));
-        $content = array_merge($content,$account);
-        if ($content['details'] != null){
-            $account = json_decode($content['details'],true);
-            $content['first_key'] = $account[array_key_first($account)];
-            $content['second_key'] = $account[array_key_last($account)];
-        }else{
-            $content['first_key'] = null;
-            $content['second_key'] = null;
-        }
         $this->session->payout = $income;
         $this->load->view('user_setting',$content);
     }
@@ -146,35 +135,48 @@ use CallbacksValidation;
         $this->load->library("SQNile");
         $this->load->helper("form");
         
+        $this->form_validation->set_rules('company_name', 'Company Name', 'trim|required|callback_alpha_dash_space');
         $this->form_validation->set_rules('current_password', 'Current Password', 'required|min_length[8]|callback_verify_password');
-        $this->form_validation->set_rules('new_password', 'New Password', 'min_length[8]');
+        $this->form_validation->set_rules('new_password', 'New Password', 'min_length[8]|callback_match_confirm');
         $this->form_validation->set_rules('confim_password', 'Confirm Password', 'min_length[8]');
         $this->form_validation->set_rules('countries', 'Countries', 'trim|required|callback_alpha_dash_space');
-        $this->form_validation->set_rules('company_name', 'Company Name', 'trim|required|callback_alpha_dash_space');
         $this->form_validation->set_rules('ifsc', 'IFSC Code', 'trim|alpha_numeric');
-        $this->form_validation->set_rules('ac_number', 'Account Number', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('ac_number', 'Account Number', 'trim|is_natural');
         $this->form_validation->set_rules('iban', 'IBAN', 'trim|alpha_numeric');
         $this->form_validation->set_rules('bic', 'BIC', 'trim|alpha_numeric');
         $this->form_validation->set_rules('short_code', 'Short Code', 'trim|is_natural');
         
         if ($this->form_validation->run()){
             $post = $this->input->post(NULL,true);
-            print_r($post);
-            echo 2;
-        }else{
-            echo 1;
-            $post = $this->input->post(NULL,true);
-            print_r($_POST);
-            $this->redirect_msg(validation_errors(),'dashboard');
-        }
-        
-        
+            // If user want to change their password
+            if ($post['confirm_password'] != null && $post['new_password'] != null ){
+                $post['new_password'] = password_hash($post['new_password'],PASSWORD_BCRYPT); 
+                $this->sqnile->query("UPDATE developer SET `password` = ? WHERE dev_id = ?",
+                [$post['new_password'],$this->session->dev['dev_id']]);
+            }
 
-    }
-    function test(){
-        
-    }
-    function session(){
-        print_r($_SESSION);
+            // If user want to update their bank account details
+            if ($this->input->post('checkbox',true)){
+                $this->sqnile->query("UPDATE account SET country=?,ifsc=?,ac_number=?,iban=?,bic=?,short_code=? WHERE dev_id = ?",
+                    [
+                        $post['countries'], $this->input->post('ifsc',true),
+                        $this->input->post('ac_number',true),
+                        $this->input->post('iban',true), $this->input->post('bic',true),
+                        $this->input->post('short_code',true),$this->session->dev['dev_id'],
+                    ]
+                );
+            }
+            // If user want to change their company name
+            if ($this->session->dev['comp_name'] != $post['company_name']){
+                $this->sqnile->query("UPDATE developer SET `comp_name` = ? WHERE dev_id = ?",
+                [$post['company_name'],$this->session->dev['dev_id']]);
+                $_SESSION['comp_name'] = $post['company_name'];
+            }
+            
+        }else{
+            $error = $this->form_validation->error_array();
+            $key = array_key_first($error);
+            $this->redirect_msg($error[$key],'dashboard');
+        }
     }
 }

@@ -151,7 +151,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="cars">Select Country</label>
-                        <select class="form-control" name="countries" >
+                        <select class="form-control" name="countries" disabled>
                           <option value="aus">Australia</option>  
                           <option value="bel">Belgium</option>  
                           <option value="can">Canada</option>
@@ -168,15 +168,13 @@
                       Update Account Details
                         <label class="switch" for="checkbox">
                           <br>
-                          <input type="checkbox" name="checkbox" id="checkbox" />
+                          <input type="checkbox" name="checkbox" id="checkbox"/>
                           <div class="slider round"></div>
                         </label>
                       
                     </div>
                   </div>
-                  <div class="row" id="row">
-                    
-                  </div>
+                  <div class="row" id="row"></div>
                   <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>" />
                 </div>
                 <div class="card-footer">

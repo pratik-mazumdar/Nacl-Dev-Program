@@ -115,7 +115,6 @@ use CallbacksValidation;
             $this->content["error_msg"] = $this->form_validation->error_array();
         }
        
-       
         // Set all content, to be used in view(form.php)
         $this->content["input_type"] = array("OTP");
         $this->content["title"] = "Verify Email";
@@ -136,7 +135,7 @@ use CallbacksValidation;
                 "comp_name"=>$this->session->temp["comp_name"],
                 "dev_id"=> $id["dev_id"]
             ); 
-            $this->sqnile->query('INSERT INTO account (dev_id,country) VALUES (?,ind)',[$this->session->dev['dev_id']]);               
+            $this->sqnile->query('INSERT INTO account (dev_id) VALUES (?)',[$this->session->dev['dev_id']]);               
             $this->session->unset_userdata("temp");
             mkdir("./uploads/".$this->session->dev["dev_id"]."/");
             redirect("index");
