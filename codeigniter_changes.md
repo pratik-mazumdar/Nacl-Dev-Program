@@ -1,4 +1,5 @@
-### All codeigniter changes must be documented here.
+#### Current Version 3.1.1
+#### All codeigniter changes must be documented here.
 
 * #### System->Form_Validation[line 548]
  from <br>
