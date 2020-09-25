@@ -4,12 +4,14 @@ use phpDocumentor\Reflection\DocBlock\Tags\Reference\Url;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once "application/models/MainModel.php";
+require_once "application/models/CallbacksValidation.php";
 require_once "application/models/Mail.php";
 require_once "application/models/File.php";
 require_once "application/models/Strings.php";
 
 class Main extends CI_Controller implements Strings{
 use MainModel;
+use CallbacksValidation;
     public function __construct(){
                 parent::__construct();
                 $this->load->helper(array('url'));
@@ -25,20 +27,15 @@ use MainModel;
     }
     
     function submit_game(){
-        if (!$this->is_online()){
-            $this->session->msg = Strings::LOGIN_REQUIRED;
-            $this->session->mark_as_flash("msg");
-            redirect("signup");    
-        }
+        if (!$this->is_online())
+            $this->redirect_msg(Strings::LOGIN_REQUIRED,'signup');
+
         $this->load->helper("form"); 
         $this->load->view('submit_game',$this->content);
     }   
     function things_to_know(){
         $this->load->view('things_to_know',$this->content);
     } 
-    function session(){
-        print_r($_SESSION);
-    }
     function logout(){
         session_destroy();  
         redirect("");     
@@ -77,6 +74,9 @@ use MainModel;
             throw new Exception(Strings::UNKNOWN_ERROR);
     }
     function upload_game(){
+        if (!$this->is_online())
+            $this->redirect_msg(Strings::LOGIN_REQUIRED,'signup');
+
         $this->load->helper("form");
         $this->load->library("form_validation");
 
@@ -104,18 +104,16 @@ use MainModel;
             echo validation_errors();
     }
     function dashboard(){
-        if (!$this->is_online()){
-            $this->session->msg = Strings::LOGIN_REQUIRED;
-            $this->session->mark_as_flash('msg');
-            redirect('signup');    
-        }
+        if (!$this->is_online())
+            $this->redirect_msg(Strings::LOGIN_REQUIRED,'signup');
+
+        $this->load->helper("form");
         $this->load->library('SQNile');
-        $payouts = $this->sqnile->fetch_all("SELECT income FROM games WHERE dev_id = ?",[$this->session->dev['dev_id']]);
+        $payout = $this->sqnile->fetch("SELECT income,payout FROM developer WHERE dev_id = ?",[$this->session->dev['dev_id']]);
         $account = $this->sqnile->fetch("SELECT account.*,country.country_name FROM account LEFT JOIN country ON account.country = country.code where account.dev_id = ?",
                         [$this->session->dev['dev_id']]);
         $income = 0;
-        foreach($payouts as $payout)
-            $income += $payout['income'];
+        $payout['income'] -= $payout['payout'];
         $content = array_merge($this->session->dev,array('income'=> $income));
         $content = array_merge($content,$account);
         if ($content['details'] != null){
@@ -126,28 +124,57 @@ use MainModel;
             $content['first_key'] = null;
             $content['second_key'] = null;
         }
-        
+        $this->session->payout = $income;
         $this->load->view('user_setting',$content);
     }
     function payout(){
-        if (!$this->is_online()){
-            $this->session->msg = Strings::LOGIN_REQUIRED;
-            $this->session->mark_as_flash('msg');
-            redirect('signup');    
-        }
+        if (!$this->is_online())
+            $this->redirect_msg(Strings::LOGIN_REQUIRED,'signup');
         $this->load->model('Mail');
         $error = $this->mail->send_mail(
             'pratikmazumdar680@protonmail.com',
-            $this->session->dev['dev_id']
+            $this->session->dev['dev_id'].' payout : '.$this->session->payout
         );
+        $this->sqnile->query("INSERT INTO developer (payout) VALUES (?)",$this->session->payout);
         $error == null ? $this->session->msg = String::PAYOUT_DONE : $this->session->msg = Strings::UNKNOWN_ERROR;
-
-
     }
     function update_dev(){
+        if (!$this->is_online())
+            $this->redirect_msg(Strings::LOGIN_REQUIRED,'signup');
+
+        $this->load->library("form_validation");
+        $this->load->library("SQNile");
+        $this->load->helper("form");
         
+        $this->form_validation->set_rules('current_password', 'Current Password', 'required|min_length[8]|callback_verify_password');
+        $this->form_validation->set_rules('new_password', 'New Password', 'min_length[8]');
+        $this->form_validation->set_rules('confim_password', 'Confirm Password', 'min_length[8]');
+        $this->form_validation->set_rules('countries', 'Countries', 'trim|required|callback_alpha_dash_space');
+        $this->form_validation->set_rules('company_name', 'Company Name', 'trim|required|callback_alpha_dash_space');
+        $this->form_validation->set_rules('ifsc', 'IFSC Code', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('ac_number', 'Account Number', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('iban', 'IBAN', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('bic', 'BIC', 'trim|alpha_numeric');
+        $this->form_validation->set_rules('short_code', 'Short Code', 'trim|is_natural');
+        
+        if ($this->form_validation->run()){
+            $post = $this->input->post(NULL,true);
+            print_r($post);
+            echo 2;
+        }else{
+            echo 1;
+            $post = $this->input->post(NULL,true);
+            print_r($_POST);
+            $this->redirect_msg(validation_errors(),'dashboard');
+        }
+        
+        
+
     }
     function test(){
         
+    }
+    function session(){
+        print_r($_SESSION);
     }
 }

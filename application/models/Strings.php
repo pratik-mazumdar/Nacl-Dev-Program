@@ -11,7 +11,8 @@ interface Strings{
     const INVALID_USER = 'Wrong credentials';
     const EXISTING_USER = 'You already have a account';
     CONST LOGOUT = 'LOGOUT';
-    const LOGIN_REQUIRED = 'Must login before submitting your game.';
+    const LOGIN_REQUIRED = 'Must login before visiting that page.';
     const DASHBOARD = 'DASHBOARD';
+    const INVALID_PASSWORD = 'Invalid Password';
     const PAYOUT_DONE = 'Amount will be reflected in a week in your account.';
 }

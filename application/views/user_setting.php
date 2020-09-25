@@ -3,8 +3,6 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="first_key" content="<?=$first_key?>">
-  <meta name="first_key" content="<?=$second_key?>">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="<?= base_url(); ?>assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png">
@@ -80,7 +78,7 @@
                   </p>
                 </a>
                 <ul class="dropdown-menu dropdown-navbar">
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Log out</a></li>
+                  <li class="nav-link"><a href="main/logout" class="nav-item dropdown-item">Log out</a></li>
                 </ul>
               </li>
               <li class="separator d-lg-none"></li>
@@ -107,6 +105,7 @@
             <div class="card">
               <div class="card-header">
                 <h5 class="title">Edit Profile</h5>
+                <?=$this->session->msg?>
               </div>
               <form id="contactForm" action="main/update_dev" method="post">
                 <div class="card-body">
@@ -114,13 +113,13 @@
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
                         <label>Company Name</label>
-                        <input type="text" class="form-control" name="company_name" placeholder="Company/Indie Developer Name" value="<?= $comp_name ?>">
+                        <input type="text" class="form-control" name="company_name" placeholder="Company/Indie Developer Name" value="<?= $comp_name ?>" >
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address </label>
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email address" value="<?= $email ?>">
+                        <input type="email" class="form-control" name="email" value="<?= $email ?>" disabled>
                       </div>
                     </div>
                   </div>
@@ -128,8 +127,8 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Old Password</label>
-                        <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Old Password" required>
+                        <label>Current Password</label>
+                        <input type="password" class="form-control" name="current_password" placeholder="Current Password" >
                       </div>
                     </div>
                   </div>
@@ -149,11 +148,10 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label for="cars">Select Country</label>
                         <select class="form-control" name="countries" >
-                        <option value="<?=$country?>"><?=$country_name?></option>  
                           <option value="aus">Australia</option>  
                           <option value="bel">Belgium</option>  
                           <option value="can">Canada</option>
@@ -165,6 +163,15 @@
                           <option value="uk">United Kingdom</option>
                         </select>
                       </div>
+                    </div>
+                    <div class="col-md-6">
+                      Update Account Details
+                        <label class="switch" for="checkbox">
+                          <br>
+                          <input type="checkbox" name="checkbox" id="checkbox" />
+                          <div class="slider round"></div>
+                        </label>
+                      
                     </div>
                   </div>
                   <div class="row" id="row">
@@ -192,9 +199,9 @@
                     <i class="tim-icons icon-money-coins size-8"></i>
                   </div>
                   <div class="col-md-6">
-                    <span class="money">Credit : <span id="credit"><?= $income ?></span></span><br><br>
-                    <span class="money">Fee :<span id="fee"></span></span><br><br>
-                    <span class="money">Total : <span id="total"></span></span><br>
+                    <span class="money">Credit : $<span id="credit"><?= $income ?></span></span><br><br>
+                    <span class="money">Fee : $<span id="fee"></span></span><br><br>
+                    <span class="money">Total : $<span id="total"></span></span><br><br>
                   </div>
                 </div>
               </div>

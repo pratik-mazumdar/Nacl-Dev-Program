@@ -20413,4 +20413,54 @@ Copyright (c) 2015 Daniel Eden
 #dropdownMenuButton{
   color:white;
 }
+
+.switch {
+  margin-top: 3em;
+  margin-left:5px;
+  display: inline-block;
+  height: 2.25em;
+  position: relative;
+  width: 4.2em;
+}
+.switch input {
+  
+  display:none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+.slider:before {
+  background-color: #fff;
+  bottom: 4px;
+  content: "";
+  height: 1.6em;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 2em;
+}
+input:checked + .slider {
+  background-color: var(--blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(1.5em);
+}
+.slider.round {
+  border-radius: 2em;
+}
+
+.slider.round:before {
+  border-radius: 60%;
+}
+
+
 /*# sourceMappingURL=dashboard-free.css.map */

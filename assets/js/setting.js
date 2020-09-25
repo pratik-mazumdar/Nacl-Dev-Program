@@ -1,9 +1,6 @@
 var col = undefined;
 var col_two = undefined;
 
-let input_first_value = $('meta[name="first_key"]').attr('content');
-let input_second_value = $('meta[name="second_key"]').attr('content');
-
 $(document).ready(function () {
 
     (function ($) {
@@ -12,22 +9,35 @@ $(document).ready(function () {
         $('#fee').text(10 * (credit / 100));
         $('#total').text(credit - (10 * (credit / 100)));
         
-        
-
-        // Country is India at the beginning
         createInputs($('select').val());
+        $('select').on('change', function () {
+            $('#checkbox').prop('checked', false); 
+            let value = $('select').val();
+            col.remove();
+            if (col_two != undefined)
+                col_two.remove();
+            createInputs(value);
 
-            // On country change, change IFSC to other codes
-            $('select').on('change', function () {
-                let value = $('select').val();
-                col.remove();
-                input_first_value = '';
-                input_second_value = '';
-                if (col_two != undefined)
-                    col_two.remove();
-                createInputs(value);
+        });
 
-            });
+        //Checkbox setting
+        $('#checkbox').on('change', function () {
+           if ($('#checkbox').prop('checked')){
+            $("[name='ac_number']").removeAttr('disabled');
+            $("[name='ifsc']").removeAttr('disabled');
+            $("[name='bic']").removeAttr('disabled');
+            $("[name='short_code']").removeAttr('disabled');
+            $("[name='iban']").removeAttr('disabled');
+           }else{
+            $("[name='ac_number']").attr('disabled','disabled');
+            $("[name='ifsc']").attr('disabled','disabled');
+            $("[name='bic']").attr('disabled','disabled');
+            $("[name='short_code']").attr('disabled','disabled');
+            $("[name='iban']").attr('disabled','disabled');
+           }
+        });   
+
+
         $('#payout').click(function () {
             window.location = "/main/payout"
         });
@@ -37,16 +47,14 @@ $(document).ready(function () {
         });
         // validate contactForm form
         $(function () {
-            $('#contactForm').validate({
+            /*$('#contactForm').validate({
                 rules: {
-                    old_password: {
+                    new_password: {
                         minlength: 8
                     },
-                    old_password : {
+                    current_password : {
+                        required:true,
                         minlength: 8
-                    },
-                    email: {
-                        required: true
                     },
                     company_name: {
                         required: true,
@@ -71,15 +79,15 @@ $(document).ready(function () {
                 messages: {
                     company_name: { alpha: "Only Whitespace and alphabet allowed" },
                     ac_name: { alpha: "Only Whitespace and alphabet allowed" },
-                    new_password: { minlength: "Your title must consist of at least 8 characters" },
-                    old_password: { minlength: "Your title must consist of at least 8 characters" },
+                    new_password: { minlength: "Your password must consist of at least 8 characters" },
+                    current_password: { minlength: "Your password must consist of at least 8 characters" },
                     confirm_password: {
-                        minlength: "Your title must consist of at least 8 characters",
+                        minlength: "Your password must consist of at least 8 characters",
                         equalTo: "New Password and Confirm password should match"
                     },
 
                 }
-            })
+            })*/
         })
 
     })(jQuery)
@@ -87,18 +95,18 @@ $(document).ready(function () {
 
 function createInputs(value) {
     if (value == 'aus')
-        col = createAcc(input_first_value);
+        col = createAcc();
     else if (value == 'ind') {
-        col_two = createAcc(input_first_value);
-        col = createIFSC(input_second_value);
+        col_two = createAcc();
+        col = createIFSC();
     } else if (value == 'uk') {
-        col_two = createAcc(input_first_value);
-        col = createShort(input_second_value);
+        col_two = createAcc();
+        col = createShort();
     } else if (value == 'bel' || value == 'fra' || value == 'ger' || value == 'fin')
-        col = createIBAN(input_first_value);
+        col = createIBAN();
     else if (value == 'jap' || value == 'can') {
-        col = createIBAN(input_first_value);
-        col_two = createBIC(input_second_value);
+        col = createIBAN();
+        col_two = createBIC();
     }
 }
 function createIFSC(value) {
@@ -110,10 +118,11 @@ function createIFSC(value) {
     label.innerText = 'IFSC CODE';
     let input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text');
+    input.setAttribute('type', 'password');
+    input.setAttribute('disabled', '');
     input.setAttribute('name', 'ifsc');
     input.setAttribute('placeholder', 'IFSC CODE');
-    input.setAttribute('required', 'required');
+    //input.setAttribute('required', 'required');
     form_control.appendChild(label);
     form_control.appendChild(input);
     col.appendChild(form_control);
@@ -121,7 +130,7 @@ function createIFSC(value) {
     return col;
 }
 
-function createAcc(value) {
+function createAcc() {
     let col = document.createElement('div');
     col.setAttribute('class', 'col-md-6');
     let form_control = document.createElement('div')
@@ -130,11 +139,11 @@ function createAcc(value) {
     label.innerText = 'Account Number';
     let input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text');
+    input.setAttribute('type', 'password');
     input.setAttribute('name', 'ac_number');
-    input.setAttribute('value', value);
     input.setAttribute('placeholder', 'Account Number');
-    input.setAttribute('required', 'required');
+    input.setAttribute('disabled', 'disabled');
+    //input.setAttribute('required', 'required');
     form_control.appendChild(label);
     form_control.appendChild(input);
     col.appendChild(form_control);
@@ -142,7 +151,7 @@ function createAcc(value) {
     return col;
 }
 
-function createIBAN(value) {
+function createIBAN() {
     let col = document.createElement('div');
     col.setAttribute('class', 'col-md-6');
     let form_control = document.createElement('div')
@@ -151,10 +160,11 @@ function createIBAN(value) {
     label.innerText = 'IBAN';
     let input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text');
+    input.setAttribute('type', 'password');
     input.setAttribute('name', 'iban');
+    input.setAttribute('disabled', 'disabled');
     input.setAttribute('placeholder', 'IBAN');
-    input.setAttribute('required', 'required');
+    //input.setAttribute('required', 'required');
     form_control.appendChild(label);
     form_control.appendChild(input);
     col.appendChild(form_control);
@@ -162,7 +172,7 @@ function createIBAN(value) {
     return col;
 }
 
-function createBIC(value) {
+function createBIC() {
     let col = document.createElement('div');
     col.setAttribute('class', 'col-md-6');
     let form_control = document.createElement('div')
@@ -171,10 +181,11 @@ function createBIC(value) {
     label.innerText = 'BIC';
     let input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text');
+    input.setAttribute('type', 'password');
     input.setAttribute('name', 'bic');
+    input.setAttribute('disabled', 'disabled');
     input.setAttribute('placeholder', 'BIC');
-    input.setAttribute('required', 'required');
+    //input.setAttribute('required', 'required');
     form_control.appendChild(label);
     form_control.appendChild(input);
     col.appendChild(form_control);
@@ -182,7 +193,7 @@ function createBIC(value) {
     return col;
 }
 
-function createShort(value) {
+function createShort() {
     let col = document.createElement('div');
     col.setAttribute('class', 'col-md-6');
     let form_control = document.createElement('div')
@@ -191,10 +202,10 @@ function createShort(value) {
     label.innerText = 'SHORT CODE';
     let input = document.createElement('input');
     input.setAttribute('class', 'form-control');
-    input.setAttribute('type', 'text');
+    input.setAttribute('type', 'password');
     input.setAttribute('name', 'short_code');
     input.setAttribute('placeholder', 'SHORT CODE');
-    input.setAttribute('required', 'required');
+    input.setAttribute('disabled', 'disabled');
     form_control.appendChild(label);
     form_control.appendChild(input);
     col.appendChild(form_control);
