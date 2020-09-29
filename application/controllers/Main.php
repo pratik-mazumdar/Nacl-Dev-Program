@@ -44,7 +44,7 @@ use CallbacksValidation;
         if ($this->input->get_request_header('X-CSRF-Token', TRUE) == $this->security->get_csrf_hash()  && $this->is_online()){
             $this->load->library('SQNile');
             $filename = $this->sqnile->fetch("SELECT thumbnail from games WHERE `dev_id` = ?",[$this->session->dev["dev_id"]]);
-            $filename != null ? $filename = $filename["thumbnail"]+2 : $filename = 2 ;
+            $filename != null ? $filename = intval($filename['thumbnail']) : $filename = 2 ;
             $config['upload_path']  = './uploads/'.$this->session->dev["dev_id"]."/";
             $config['allowed_types']  = 'jpeg|jpg|png';
             $config['file_name']  = $filename.'.png';
@@ -61,7 +61,7 @@ use CallbacksValidation;
         if ($this->input->get_request_header('X-CSRF-Token', TRUE) == $this->security->get_csrf_hash() && $this->is_online()){
             $this->load->library("SQNile");
             $filename = $this->sqnile->fetch("SELECT apk from games WHERE `dev_id` = ?",[$this->session->dev["dev_id"]]);
-            $filename != null ?  $filename = $filename['apk'] += 2 :  $filename = 1 ;
+            $filename != null ?  $filename =intval($filename['apk']) += 2 :  $filename = 1 ;
             $config['upload_path']  = './uploads/'.$this->session->dev["dev_id"]."/";
             $config['allowed_types']  = 'apk';
             $config['file_name']  =  $filename.'.apk';
