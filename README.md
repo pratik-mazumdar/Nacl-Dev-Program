@@ -3,7 +3,7 @@ Web app for developers to submit there games in Nacl-Appstore.
 ### Development
 
 #### Codeigniter changes
-Documented [here](https://github.com/LUCIF680/Nacl-Dev-Program/edit/master/codeigniter_changes.md)
+Documented [here](https://github.com/LUCIF680/Nacl-Dev-Program/blob/master/codeigniter_changes.md)
 
 #### Framework/libraries used are 
 1. Codeigniter
