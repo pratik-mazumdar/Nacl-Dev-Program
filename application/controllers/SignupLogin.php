@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require_once "application/models/MainModel.php";
 require_once "application/models/CallbacksValidation.php";
 require_once "application/models/Mail.php";
-require_once "application/models/File.php";
+
 require_once "application/models/Strings.php";
 
 class SignupLogin extends CI_Controller implements Strings{
