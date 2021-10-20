@@ -17,7 +17,7 @@ class Mail{
             $mail->Host = '	smtp.mail.yahoo.com';
             $mail->SMTPSecure = 'ssl';
             $mail->Username = 'pratikmazumdar680@yahoo.com';
-            $mail->Password = 'apllrkljezvlhyxk';
+            $mail->Password = '';
             $mail->Port = 465;
             $mail->SMTPAuth = true;
             $mail->setFrom('pratikmazumdar680@yahoo.com', 'NACL');
